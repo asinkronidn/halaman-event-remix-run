@@ -1,5 +1,7 @@
 import { useLoaderData } from "@remix-run/react";
 import { formatDate } from '../helpers';
+import { getEvents } from '../data/events.server';
+
 
 export const meta = () => {
   return [{
@@ -23,20 +25,11 @@ export const meta = () => {
   }];
 };
 
-export const loader = async () => {
-  const res = await fetch(`${process.env.BASE_API_URL}api/events`);
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
- 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data')
-  }
- 
-  return res.json()
+export const loader = () => {
+  return getEvents();
 };
 
-export default function Index() {
+export default function HomePage() {
   const events = useLoaderData();
 
   return (
@@ -44,18 +37,18 @@ export default function Index() {
       <div className={`flex flex-col gap-y-[30px]`}>
       {events.map(event => (
           <div key={event.id} className={`flex flex-wrap bg-white py-7 pr-7 relative`}>
-            { !event.status || new Date(event.startTime) < new Date() ? (
+            { !event.status || new Date(event.starttime) < new Date() ? (
               <div className={`disable-event absolute top-0	left-0 w-full h-full`}/>
             ) : (
               ''
             )}
             <div className={`w-20 text-center md:w-24 lg:w-[140px]`}>
-              <time className={`flex flex-col items-center text-xs font-bold uppercase md:text-base`} dateTime={formatDate(event.startTime, 'full')}>
+              <time className={`flex flex-col items-center text-xs font-bold uppercase md:text-base`} dateTime={formatDate(event.starttime, 'full')}>
                 <span className={`text-accent`}>
-                  {formatDate(event.startTime, 'month')}
+                  {formatDate(event.starttime, 'month')}
                 </span>
                 <span className={`text-2xl tracking-tighter md:text-[34px] md:leading-none text-primary`}>
-                  {formatDate(event.startTime, 'day')}
+                  {formatDate(event.starttime, 'day')}
                 </span>
               </time>
             </div>
@@ -95,7 +88,7 @@ export default function Index() {
                   </div>
                   <div>
                     <h5 className={`font-bold tracking-tight text-primary md:text-lg md:leading-tight lg:pb-[2px]`}>
-                      {formatDate(event.startTime, 'hour')}
+                      {formatDate(event.starttime, 'hour')}
                     </h5>
                     <span className={`text-xs lg:text-sm`}>Time</span>
                   </div>

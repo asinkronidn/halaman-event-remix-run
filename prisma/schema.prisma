@@ -7,8 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url           = env("DATABASE_URL") // connection string with pgBouncer/pooling enabled
-  directUrl = env("DIRECT_URL") // plain connection with no pgBouncer (used for push & migrations)
+  url           = env("DATABASE_URL")
 }
 
 model Event {

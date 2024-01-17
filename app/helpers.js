@@ -1,5 +1,4 @@
 export function formatDate (date, type) {
-    // console.log(date)
     // console.log(date.toString())
     if (type === 'full') {
       return date.toString();
