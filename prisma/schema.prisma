@@ -7,5 +7,35 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url           = env("DATABASE_URL") // connection string with pgBouncer/pooling enabled
+  directUrl = env("DIRECT_URL") // plain connection with no pgBouncer (used for push & migrations)
+}
+
+model Event {
+  id    Int     @id @default(autoincrement())
+  status Boolean @default(true)
+  place  String?
+  url  String?
+  starttime  DateTime?
+  endtime  DateTime?
+  title  String?
+  price  Int?
+  max_participants Int @default(0)
+  short_description  String?
+  description  String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  eventRegistrations EventRegistration[]
+}
+
+model EventRegistration {
+  id    Int     @id @default(autoincrement())
+  event    Event    @relation(fields: [eventId], references: [id])
+  eventId  Int
+  email  String?
+  nama  String?
+  kota  String?
+  phone  String?
+  dari_mana_mendapat_info_workshop  String?
+  createdAt  DateTime   @default(now())
 }
