@@ -9,6 +9,7 @@ export default {
       'gray-light': '#979797',
       'gray-lighter': '#fcfcfc',
       'white': '#ffffff',
+      'red-alert': '#FF0000'
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],

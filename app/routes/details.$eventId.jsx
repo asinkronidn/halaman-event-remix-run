@@ -1,20 +1,21 @@
-import { useLoaderData, useActionData } from "@remix-run/react";
-// import { Event } from '../../../interfaces/event';
-import { formatDate } from '../helpers';
+import { useLoaderData, useActionData, json, redirect } from "@remix-run/react";
+import { formatDate, validateEmail } from '../helpers';
 import parse from 'html-react-parser';
 import { getEventByUrl } from '../data/events.server';
+import { addRegistration } from '../data/eventRegistrations.server';
 import RegistrationForm from '../components/registration-form';
+import { useSearchParams } from "@remix-run/react";
 
 export const meta = ({data}) => {
     return [{
-      title: data.title,
-      description:data.short_description,
+      title: data.event.title,
+      description:data.event.short_description,
     }, {
       property: "og:title",
-      content: data.title,
+      content: data.event.title,
     }, {
       property: "og:description",
-      content: data.short_description
+      content: data.event.short_description
     }, {
       property: "og:locale",
       content: "id_ID",
@@ -29,39 +30,67 @@ export const meta = ({data}) => {
 
 export async function action({
     request,
+    params
   }) {
     const formData = await request.formData()
-    const title = String(formData.get("title"));
-    const content = String(formData.get("content"));
+    const email = String(formData.get("email"));
+    const nama = String(formData.get("nama"));
+    const kota = String(formData.get("kota"));
+    const phone = String(formData.get("phone"));
+    const dari_mana_mendapat_info_workshop = String(formData.get("dari_mana_mendapat_info_workshop"));
   
     // definisikan rules disini
     const errors = {};
-    if (!title) {
-      errors.title = "Title wajib diisi";
+    if (!email) {
+      errors.email = "Email wajib diisi";
     }
-    if (!content) {
-      errors.content = "Content wajib diisi";
-    } else if (!content.length < 12) {
-      errors.title = "Title wajib tidak boleh kurang dari 12 karakter";
+    if (!validateEmail(email)) {
+      errors.email = "Email tidak valid";
     }
+    if (!nama) {
+      errors.nama = "Nama wajib diisi";
+    }
+    if (!kota) {
+      errors.kota = "Kota wajib diisi";
+    }
+    // if (!phone) {
+    //   errors.phone = "No. Telp wajib diisi";
+    // }
+    if (!dari_mana_mendapat_info_workshop || dari_mana_mendapat_info_workshop === 'null') {
+      errors.dari_mana_mendapat_info_workshop = "Wajib pilih salah satu";
+    }
+
     // jika object error tidak kosong maka return errors dalam bentuk json
     if (Object.keys(errors).length > 0) {
       return json({ errors });
     }
-  
-    const noteData = Object.fromEntries(formData)
-    noteData.id =  new Date().toISOString();
-    await storeNotes(noteData);
-    return redirect('/')
+    const event = await getEventByUrl(params.eventId);
+    await addRegistration({
+        eventId: event.id,
+        email: email,
+        nama: nama,
+        kota: kota,
+        phone: phone,
+        dari_mana_mendapat_info_workshop: dari_mana_mendapat_info_workshop
+    });
+
+    return redirect(`/details/${params.eventId}?success=1`);
 }  
 
-export const loader = ({params}) => {
-    return getEventByUrl(params.eventId);
+export const loader = async ({
+    params
+  }) => {
+    const event = await getEventByUrl(params.eventId);
+    return json(
+        { event },
+    );
 };
 
 export default function EventPage() {
-    const event = useLoaderData();
+    const [searchParams] = useSearchParams();
+    const { event } = useLoaderData();
     const actionData = useActionData();
+    const isSuccess = parseInt(searchParams.get("success")) === 1;
 
     return (
         <div>
@@ -150,7 +179,7 @@ export default function EventPage() {
                 <div className={`col-span-full md:col-start-2 md:col-end-12`}>
                     <h3 className={`mb-4 text-xl font-bold tracking-tight text-primary md:text-2xl lg:text-3xl mb-5 xl:text-3.5xl xl:tracking-tighter`}>Registration</h3>
                     <div className={`w-full`}>
-                        <RegistrationForm actionData={actionData} eventDetail={event}/>
+                        <RegistrationForm actionData={actionData} eventDetail={event} isSuccess={isSuccess}/>
                     </div>
                 </div>
                 )}

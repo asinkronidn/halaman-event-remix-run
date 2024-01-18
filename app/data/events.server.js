@@ -12,6 +12,16 @@ export async function getEvents() {
   }
 }
 
+export async function getEventById(id) {
+  try {
+    const event = await prisma.event.findFirst({ where: { id } });
+    return event;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export async function getEventByUrl(url) {
   try {
     const event = await prisma.event.findFirst({ where: { url } });

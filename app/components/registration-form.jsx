@@ -1,43 +1,61 @@
-import { serializeErrorMessage } from '../helpers';
-// import { EventRegistration } from '../interfaces/eventRegistration';
 import { Form } from "@remix-run/react";
-import parse from 'html-react-parser';
-
+import React, { useEffect } from 'react';
   
-export default function RegistrationForm({actionData, eventDetail}) {
+export default function RegistrationForm({actionData, eventDetail, isSuccess}) {
+    
+    useEffect(() => {
+        if (actionData && actionData.errors) {
+            document.querySelector(`#${Object.keys(actionData.errors)[0]}`).scrollIntoView({
+                behavior: 'smooth'
+           });
+        } else if (isSuccess) {
+            document.querySelector(`#successAlert`).scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    }, [
+        isSuccess,
+        actionData
+    ]);
     return (
         <div>
         {
-            actionData && actionData.isSuccess ? (
-            <div className={`bg-white border-t-4 border-purple rounded-b px-4 py-3 shadow-md`} role="alert">
+            isSuccess ? (
+            <div id="successAlert" className={`bg-white border-t-4 border-purple rounded-b px-4 py-3 shadow-md`} role="alert">
                 <div>
                     <p className={`font-bold`}>Selamat pendaftaran anda berhasil</p>
                     <p className={`text-sm`}>Jika anda sebelumnya belum menjadi member asinkron.com. Silahkan cek undangan Discord di inbox/spam anda.</p>
                 </div>
             </div>
             ) : (
-            <Form method="post" action={`details/${eventDetail.url}`}>
-            {/* {error && <div style={{ color: 'red' }} id={`errorMessage`}>
-                { parse(error) }
-            </div>} */}
+            <Form method="post" action={`/details/${eventDetail.url}`}>
                 <div className={`mb-4`}>
                     <label className={`block text-gray-700 text-sm font-bold mb-2`} htmlFor={`email`}>
                         Email*
                     </label>
-                    <input required={true} className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`} id="email" name="email" type="email" placeholder="Email"/>
-                    <small>Silahkan isi dengan alamat email aktif.</small>
+                    <input required={false} className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`} id="email" name="email" type="text" placeholder="Email"/>
+                    <small className={`block`}>Silahkan isi dengan alamat email aktif.</small>
+                    {actionData && actionData.errors && actionData.errors.email ? (
+                    <em className={`text-red-alert`}>{actionData.errors.email}</em>
+                    ) : null}
                 </div>
                 <div className={`mb-4`}>
                     <label className={`block text-gray-700 text-sm font-bold mb-2`} htmlFor={`nama`}>
                         Nama*
                     </label>
-                    <input required={true} className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`} id="nama" name="nama" type="text" placeholder="Nama"/>
+                    <input required={false} className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`} id="nama" name="nama" type="text" placeholder="Nama"/>
+                    {actionData && actionData.errors && actionData.errors.nama ? (
+                    <em className={`text-red-alert`}>{actionData.errors.nama}</em>
+                    ) : null}
                 </div>
                 <div className={`mb-4`}>
                     <label className={`block text-gray-700 text-sm font-bold mb-2`} htmlFor={`kota`}>
                         Kota Domisili*
                     </label>
-                    <input required={true} className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`} id="kota" name="kota" type="text" placeholder="Kota"/>
+                    <input required={false} className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`} id="kota" name="kota" type="text" placeholder="Kota"/>
+                    {actionData && actionData.errors && actionData.errors.kota ? (
+                    <em className={`text-red-alert`}>{actionData.errors.kota}</em>
+                    ) : null}
                 </div>
                 <div className={`mb-4`}>
                     <label className={`block text-gray-700 text-sm font-bold mb-2`} htmlFor={`phone`}>
@@ -47,9 +65,12 @@ export default function RegistrationForm({actionData, eventDetail}) {
                     <small>Isi agar tidak ketinggalan info terbaru soal artikel dan workshop melalui notifikasi Whatsapp.</small>
                 </div>
                 <div className={`mb-6`}>
-                    <label className={`block text-gray-700 text-sm font-bold mb-2`} htmlFor={`phone`}>
+                    <label id="dari_mana_mendapat_info_workshop" className={`block text-gray-700 text-sm font-bold mb-2`} htmlFor={`phone`}>
                         Dari mana Mendapat Info Workshop Ini?*
                     </label>
+                    {actionData && actionData.errors && actionData.errors.dari_mana_mendapat_info_workshop ? (
+                    <em className={`text-red-alert`}>{actionData.errors.dari_mana_mendapat_info_workshop}</em>
+                    ) : null}
                     {['facebook', 'discord', 'email', 'whatsapp', 'instagram', 'twitter', 'linkedin', 'website'].map((channel, index) => (
                         <div className={`flex items-center mb-4`} key={index}>
                             <input id={`country-option-${index}`} type="radio" name="dari_mana_mendapat_info_workshop" value={channel} className={`h-4 w-4 border-gray-300 focus:ring-2 focus:ring-blue-300`} aria-labelledby={`country-option-${index}`} aria-describedby="{`country-option-${index}`}"/>
