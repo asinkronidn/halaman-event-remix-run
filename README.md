@@ -18,9 +18,6 @@ Lalu buka [http://localhost:3000](http://localhost:3000) di browser kamu.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about Remix Run, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-Dokumentasi Remix, [Remix Docs](https://remix.run/docs).
+- [Remix Docs](https://remix.run/docs) - learn about Remix Run features and API.
