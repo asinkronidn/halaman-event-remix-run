@@ -38,3 +38,11 @@ model EventRegistration {
   dari_mana_mendapat_info_workshop  String?
   createdAt  DateTime   @default(now())
 }
+
+model Member {
+  id    Int     @id @default(autoincrement())
+  member_id  String @db.VarChar(30)
+  name  String @db.VarChar(100)
+  email  String @db.VarChar(100)
+  phone_number  String? @db.VarChar(20)
+}

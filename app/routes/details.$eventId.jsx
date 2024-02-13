@@ -1,12 +1,14 @@
 import { useLoaderData, useActionData, json, redirect } from "@remix-run/react";
-import { formatDate, validateEmail } from '../helpers';
+import { formatDate, validateEmail, extractImagesFromString } from '../helpers';
 import parse from 'html-react-parser';
 import { getEventByUrl } from '../data/events.server';
+import { getMemberByEmail } from '../data/members.server';
 import { addRegistration } from '../data/eventRegistrations.server';
 import RegistrationForm from '../components/registration-form';
 import { useSearchParams } from "@remix-run/react";
 
 export const meta = ({data}) => {
+    const extractedImages = extractImagesFromString(data.event.description);
     return [{
       title: data.event.title,
       description:data.event.short_description,
@@ -24,7 +26,7 @@ export const meta = ({data}) => {
       content: "website",
     }, {
       property: "og:image",
-      content: "https://web-tools.asinkron.com/assets/img/workshop-remix-next-step.png",
+      content: extractedImages.length ? extractedImages[0] : "https://web-tools.asinkron.com/assets/img/workshop-remix-next-step.png",
     }];
 };
 
@@ -33,13 +35,10 @@ export async function action({
     params
   }) {
     const formData = await request.formData()
+    const formStep = parseInt(formData.get("form-step"));
     const email = String(formData.get("email"));
-    const nama = String(formData.get("nama"));
-    const kota = String(formData.get("kota"));
-    const phone = String(formData.get("phone"));
-    const dari_mana_mendapat_info_workshop = String(formData.get("dari_mana_mendapat_info_workshop"));
+    let nama = null, kota = null, phone = null, dari_mana_mendapat_info_workshop = null;
   
-    // definisikan rules disini
     const errors = {};
     if (!email) {
       errors.email = "Email wajib diisi";
@@ -47,20 +46,39 @@ export async function action({
     if (!validateEmail(email)) {
       errors.email = "Email tidak valid";
     }
-    if (!nama) {
-      errors.nama = "Nama wajib diisi";
-    }
-    if (!kota) {
-      errors.kota = "Kota wajib diisi";
-    }
-    // if (!phone) {
-    //   errors.phone = "No. Telp wajib diisi";
-    // }
-    if (!dari_mana_mendapat_info_workshop || dari_mana_mendapat_info_workshop === 'null') {
-      errors.dari_mana_mendapat_info_workshop = "Wajib pilih salah satu";
+
+    let registeredMemberData = null;
+    if (formStep === 1) {
+        if (Object.keys(errors).length > 0) {
+            return json({ errors });
+        }
+        console.log('email', email)
+        registeredMemberData = await getMemberByEmail(email);
+        if (!registeredMemberData) {
+            return json({ nextStep: true });
+        }
     }
 
-    // jika object error tidak kosong maka return errors dalam bentuk json
+    if (!registeredMemberData) {
+        nama = String(formData.get("nama"));
+        kota = String(formData.get("kota"));
+        phone = String(formData.get("phone"));
+        dari_mana_mendapat_info_workshop = String(formData.get("dari_mana_mendapat_info_workshop"));
+
+        if (!nama) {
+            errors.nama = "Nama wajib diisi";
+        }
+        if (!kota) {
+            errors.kota = "Kota wajib diisi";
+        }
+        if (!dari_mana_mendapat_info_workshop || dari_mana_mendapat_info_workshop === 'null') {
+            errors.dari_mana_mendapat_info_workshop = "Wajib pilih salah satu";
+        }
+    } else {
+        nama = registeredMemberData.name
+        phone = registeredMemberData.phone_number
+        dari_mana_mendapat_info_workshop = 'membership'
+    }
     if (Object.keys(errors).length > 0) {
       return json({ errors });
     }
