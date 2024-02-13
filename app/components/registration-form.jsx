@@ -1,8 +1,9 @@
-import { Form } from "@remix-run/react";
+import { Form, useNavigation } from "@remix-run/react";
 import React, { useEffect, useState } from 'react';
   
 export default function RegistrationForm({actionData, eventDetail, isSuccess}) {
-    const [loading, setLoading] = useState(false);
+    const navigation = useNavigation();
+    // const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [formStep, setFormStep] = useState(1);
     const [errors, setErrors] = useState(null);
@@ -22,11 +23,11 @@ export default function RegistrationForm({actionData, eventDetail, isSuccess}) {
 
     useEffect(() => {
         setErrors(null)
-        setLoading(false)
+        // setLoading(false)
         if (actionData) {
-            if (actionData.isLoading) {
-                setLoading(actionData.isLoading)
-            }
+            // if (actionData.isLoading) {
+            //     setLoading(actionData.isLoading)
+            // }
             if (actionData.errors) {
                 setErrors(actionData.errors)
                 setTimeout(() => {
@@ -43,6 +44,8 @@ export default function RegistrationForm({actionData, eventDetail, isSuccess}) {
     }, [
         actionData
     ]);
+
+    const isSubmitting = navigation.formAction === `/details/${eventDetail.url}`;
 
     return (
         <div>
@@ -153,8 +156,8 @@ export default function RegistrationForm({actionData, eventDetail, isSuccess}) {
 
                 <div className={`flex items-center justify-between`}>
                     <input type="hidden" name="form-step" value={ formStep } />
-                    <button disabled={ loading } className={`bg-purple w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`} type="submit">
-                        {loading ? 'Loading...' : 'Submit'}
+                    <button disabled={ isSubmitting } className={`bg-purple w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`} type="submit">
+                        {isSubmitting ? 'Loading...' : 'Submit'}
                     </button>
                 </div>
             </Form>
