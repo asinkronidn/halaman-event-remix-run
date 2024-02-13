@@ -52,7 +52,7 @@ export async function action({
         if (Object.keys(errors).length > 0) {
             return json({ errors });
         }
-        console.log('email', email)
+        // console.log('email', email)
         registeredMemberData = await getMemberByEmail(email);
         if (!registeredMemberData) {
             return json({ nextStep: true });
