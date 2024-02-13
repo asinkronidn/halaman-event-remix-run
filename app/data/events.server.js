@@ -4,9 +4,9 @@ export async function getEvents() {
   try {
     const events = await prisma.event.findMany({
       orderBy: { starttime: 'desc' },
-      cacheStrategy: {
-        ttl: 43200, // 12 hours
-      },    
+      // cacheStrategy: {
+      //   ttl: 43200, // 12 hours
+      // },    
     });
     return events;
   } catch (error) {
@@ -18,9 +18,9 @@ export async function getEvents() {
 export async function getEventById(id) {
   try {
     const event = await prisma.event.findFirst({ where: { id },
-      cacheStrategy: {
-        ttl: 43200, // 12 hours
-      },
+      // cacheStrategy: {
+      //   ttl: 43200, // 12 hours
+      // },
     });
     return event;
   } catch (error) {
@@ -32,9 +32,9 @@ export async function getEventById(id) {
 export async function getEventByUrl(url) {
   try {
     const event = await prisma.event.findFirst({ where: { url },
-      cacheStrategy: {
-        ttl: 43200, // 12 hours
-      },
+      // cacheStrategy: {
+      //   ttl: 43200, // 12 hours
+      // },
     });
     return event;
   } catch (error) {
