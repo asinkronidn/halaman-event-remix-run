@@ -6,11 +6,11 @@ export function formatDate (date, type) {
     date = new Date(date);
     let formatter = null;
     if (type === 'hour') {
-      formatter = new Intl.DateTimeFormat('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' });
+      formatter = new Intl.DateTimeFormat('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
     } else if (type === 'day') {
-      formatter = new Intl.DateTimeFormat('id-ID', { day: '2-digit', timeZone: 'Asia/Jakarta' });
+      formatter = new Intl.DateTimeFormat('id-ID', { day: '2-digit', timeZone: 'UTC' });
     } else {
-      formatter = new Intl.DateTimeFormat('id-ID', { month: 'short', timeZone: 'Asia/Jakarta' });
+      formatter = new Intl.DateTimeFormat('id-ID', { month: 'short', timeZone: 'UTC' });
     }
     return formatter.format(date);
 }
