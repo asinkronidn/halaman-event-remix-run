@@ -6,7 +6,7 @@ import { getMemberByEmail } from '../data/members.server';
 import { addRegistration } from '../data/eventRegistrations.server';
 import RegistrationForm from '../components/registration-form';
 import { useSearchParams } from "@remix-run/react";
-import GhostAdminAPI from "../utils/ghost-admin-api.server";
+import { addMember } from "../utils/ghost-admin-api/member.server";
 
 export const meta = ({data}) => {
     const extractedImages = extractImagesFromString(data.event.description);
@@ -94,16 +94,9 @@ export async function action({
     });
     
     if (process.env.GHOST_INTEGRATION && !registeredMemberData) {
-        const api = new GhostAdminAPI({
-            url: process.env.GHOST_BASE_URL,
-            key: process.env.GHOST_ADMIN_KEY,
-            version: "v5.0",
-        });
-        api.members.add({
-            name: nama, 
-            email: email
-        }).then(resp => {
-            console.log('resp', resp)
+        addMember({
+            email: email,
+            name: nama,
         }).catch(err => console.error(err));
     }
 
