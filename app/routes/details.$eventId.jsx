@@ -26,7 +26,7 @@ export const meta = ({data}) => {
       content: "website",
     }, {
       property: "og:image",
-      content: extractedImages.length ? extractedImages[0] : "https://web-tools.asinkron.com/assets/img/workshop-remix-next-step.png",
+      content: extractedImages && extractedImages.length ? extractedImages[0] : "https://web-tools.asinkron.com/assets/img/workshop-remix-next-step.png",
     }];
 };
 
