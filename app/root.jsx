@@ -10,6 +10,7 @@ import {
 } from "@remix-run/react";
 import globalStyles from './styles/global.css';
 import logoAsinkron from "../public/assets/img/logo-asinkron.png";
+import { Analytics } from '@vercel/analytics/react';
 
 
 export const links = () => [
@@ -62,6 +63,7 @@ export default function App() {
         <footer className={`text-center pb-3`}>
           Made With <a href="https://remix.run" target="_blank"><u>Remix Run</u></a>
         </footer>
+        <Analytics />
       </body>
     </html>
   );

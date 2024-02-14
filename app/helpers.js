@@ -24,5 +24,6 @@ export function validateEmail (email) {
 };
 
 export function extractImagesFromString (string) {
-  return string.match(/<img [^>]*src="[^"]*"[^>]*>/gm).map(x => x.replace(/.*src="([^"]*)".*/, '$1'));
+  const array = string.match(/<img [^>]*src="[^"]*"[^>]*>/gm);
+  return array ? array.map(x => x.replace(/.*src="([^"]*)".*/, '$1')) : [];
 }
