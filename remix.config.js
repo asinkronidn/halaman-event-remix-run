@@ -5,4 +5,13 @@ export default {
   // assetsBuildDirectory: "public/build",
   // publicPath: "/build/",
   // serverBuildPath: "build/index.js",
+  // browserNodeBuiltinsPolyfill: {
+  //   modules: {
+  //     fs: 'empty',
+  //     buffer: 'empty',
+  //     stream: 'empty',
+  //     util: 'empty',
+  //     crypto: 'empty',
+  //   }
+  // },
 };

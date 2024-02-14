@@ -2,7 +2,6 @@ import { useLoaderData } from "@remix-run/react";
 import { formatDate } from '../helpers';
 import { getEvents } from '../data/events.server';
 
-
 export const meta = () => {
   return [{
     title: "Event Asinkron Indonesia",

@@ -6,6 +6,7 @@ import { getMemberByEmail } from '../data/members.server';
 import { addRegistration } from '../data/eventRegistrations.server';
 import RegistrationForm from '../components/registration-form';
 import { useSearchParams } from "@remix-run/react";
+import GhostAdminAPI from "../utils/ghost-admin-api.server";
 
 export const meta = ({data}) => {
     const extractedImages = extractImagesFromString(data.event.description);
@@ -91,6 +92,20 @@ export async function action({
         phone: phone,
         dari_mana_mendapat_info_workshop: dari_mana_mendapat_info_workshop
     });
+    
+    if (process.env.GHOST_INTEGRATION && !registeredMemberData) {
+        const api = new GhostAdminAPI({
+            url: process.env.GHOST_BASE_URL,
+            key: process.env.GHOST_ADMIN_KEY,
+            version: "v5.0",
+        });
+        api.members.add({
+            name: nama, 
+            email: email
+        }).then(resp => {
+            console.log('resp', resp)
+        }).catch(err => console.error(err));
+    }
 
     return redirect(`/details/${params.eventId}?success=1`);
 }  
