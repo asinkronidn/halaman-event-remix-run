@@ -11,7 +11,7 @@ import {
 import globalStyles from './styles/global.css';
 import logoAsinkron from "../public/assets/img/logo-asinkron.png";
 import { Analytics } from '@vercel/analytics/react';
-
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const links = () => [
   { rel: "stylesheet", href: globalStyles },
@@ -64,6 +64,7 @@ export default function App() {
           Made With <a href="https://remix.run" target="_blank"><u>Remix Run</u></a>
         </footer>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
