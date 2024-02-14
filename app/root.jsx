@@ -59,6 +59,9 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+        <footer className={`text-center pb-3`}>
+          Made With <a href="https://remix.run" target="_blank"><u>Remix Run</u></a>
+        </footer>
       </body>
     </html>
   );
