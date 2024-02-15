@@ -46,3 +46,15 @@ model Member {
   email  String @db.VarChar(100)
   phone_number  String? @db.VarChar(20)
 }
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email  String @db.VarChar(100) @unique
+  role  Role     @default(STAFF)
+  name  String @db.VarChar(100)
+}
+
+enum Role {
+  STAFF
+  ADMIN
+}
