@@ -1,12 +1,12 @@
 import { useLoaderData, useActionData, json, redirect } from "@remix-run/react";
-import { formatDate, validateEmail, extractImagesFromString } from '../../helpers';
+import { formatDate, validateEmail, extractImagesFromString } from '../helpers';
 import parse from 'html-react-parser';
-import { getEventByUrl } from '../../data/events.server';
-import { getMemberByEmail } from '../../data/members.server';
-import { addRegistration } from '../../data/eventRegistrations.server';
-import RegistrationForm from '../../components/registration-form';
+import { getEventByUrl } from '../data/events.server';
+import { getMemberByEmail } from '../data/members.server';
+import { addRegistration } from '../data/eventRegistrations.server';
+import RegistrationForm from '../components/registration-form';
 import { useSearchParams } from "@remix-run/react";
-import { addMember } from "../../services/ghost-admin-api/member.server";
+import { addMember } from "../services/ghost-admin-api/member.server";
 
 export const meta = ({data}) => {
     const extractedImages = extractImagesFromString(data.event.description);

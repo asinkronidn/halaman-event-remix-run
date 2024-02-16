@@ -50,6 +50,7 @@ model Member {
 model User {
   id    Int     @id @default(autoincrement())
   email  String @db.VarChar(100) @unique
+  password  String @db.VarChar(150)
   role  Role     @default(STAFF)
   name  String @db.VarChar(100)
 }

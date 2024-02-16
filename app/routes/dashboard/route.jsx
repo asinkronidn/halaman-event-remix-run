@@ -1,18 +1,19 @@
 import {
     Outlet
-  } from "@remix-run/react";
+} from "@remix-run/react";
+import { requireUserSession } from "../../services/auth/auth.server";
 
-import { authenticator } from "../../services/auth.server";
-
+// import authenticator from "../../services/auth/auth.server";
 
 export const loader = async ({
     request
 }) => {
-    const user = await authenticator.isAuthenticated(request, {
-        failureRedirect: "/login",
-    });      
+    const userId = await requireUserSession({
+        request,
+        redirectPath: '/login'
+    });
     return {
-        user
+        userId
     };
 };
 
