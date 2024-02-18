@@ -16,7 +16,7 @@ export const meta = () => {
       property: "robots",
       content: "noindex",
     }];
-  };
+};
 
 export const loader = async ({
     request

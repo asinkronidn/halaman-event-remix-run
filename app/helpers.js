@@ -9,6 +9,8 @@ export function formatDate (date, type) {
       formatter = new Intl.DateTimeFormat('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
     } else if (type === 'day') {
       formatter = new Intl.DateTimeFormat('id-ID', { day: '2-digit', timeZone: 'UTC' });
+    } else if (type === 'period') {
+      formatter = new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
     } else {
       formatter = new Intl.DateTimeFormat('id-ID', { month: 'short', timeZone: 'UTC' });
     }
@@ -26,4 +28,10 @@ export function validateEmail (email) {
 export function extractImagesFromString (string) {
   const array = string.match(/<img [^>]*src="[^"]*"[^>]*>/gm);
   return array ? array.map(x => x.replace(/.*src="([^"]*)".*/, '$1')) : [];
+}
+
+export function sanitizeDashboardParentMeta (matches) {
+  return matches
+  .flatMap((match) => match.meta ?? [])
+  .filter((meta) => !("title" in meta));;
 }

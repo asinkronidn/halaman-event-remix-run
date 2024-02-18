@@ -42,3 +42,16 @@ export async function getEventByUrl(url) {
     throw error;
   }
 }
+
+export async function deleteEvent(id) {
+  try {
+    await prisma.event.delete({
+      where: {
+        id
+      }
+    })
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

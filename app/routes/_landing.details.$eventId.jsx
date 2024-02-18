@@ -107,6 +107,12 @@ export const loader = async ({
     params
   }) => {
     const event = await getEventByUrl(params.eventId);
+    if (!event) {
+        throw new Response(null, {
+          status: 404,
+          statusText: "Not Found",
+        });
+    }    
     return json(
         { event },
     );

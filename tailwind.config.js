@@ -6,6 +6,7 @@ export default {
       'purple': '#4126b2',
       'gray-dark': '#15171a',
       'gray': '#979797',
+      'green': '#42b883',
       'gray-light': '#979797',
       'gray-lighter': '#fcfcfc',
       'white': '#ffffff',
